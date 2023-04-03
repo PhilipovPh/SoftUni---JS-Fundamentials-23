@@ -71,6 +71,7 @@ function plantDiscovery(input) {
 
         return averageRating;
     }
+    console.log(plants);
 }
 
 plantDiscovery(["3",
