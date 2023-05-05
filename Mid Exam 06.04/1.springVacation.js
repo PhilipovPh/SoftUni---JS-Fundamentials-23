@@ -1,54 +1,61 @@
-function springVacation(input) {
-    let days = Number(input.shift());
-    let budget = Number(input.shift());
-    let groupSize = Number(input.shift());
-    let fuelPrice = Number(input.shift());
-    let foodPricePerPerson = Number(input.shift());
-    let hotelPricePerPerson = Number(input.shift());
-    let expenses = 0;
-    let currentDay = 0;
-    let discountedHotelPrice = groupSize > 10 ? 0.75 * hotelPricePerPerson : hotelPricePerPerson;
-  
-    for (let i = 0; i < days; i++) {
-      currentDay++;
-      let distance = Number(input.shift());
-      let travelExpenses = distance * fuelPrice;
-      expenses += foodPricePerPerson * groupSize + discountedHotelPrice * groupSize + travelExpenses;
-  
-      if (currentDay % 3 === 0 || currentDay % 5 === 0) {
-        expenses *= 1.4;
-      }
-  
-      if (currentDay % 7 === 0) {
-        expenses -= expenses / groupSize;
-      }
-  
-      if (expenses > budget) {
-        let neededMoney = (expenses - budget).toFixed(2);
-        console.log(`Not enough money to continue the trip. You need ${neededMoney}$ more.`);
-        return;
-      }
-    }
-  
-    let remainingBudget = (budget - expenses).toFixed(2);
-    console.log(`You have reached the destination. You have ${remainingBudget}$ budget left.`);
+function vacation(input) {
+  let days = Number(input[0]);
+  let budget = Number(input[1]);
+  let people = Number(input[2]);
+  let fuelPrice = Number(input[3]);
+  let foodPrice = Number(input[4]);
+  let roomPrice = Number(input[5]);
+
+  let totalFoodAndAccommodationExpenses = roomPrice * people * days;
+  if (people > 10) {
+    totalFoodAndAccommodationExpenses *= 0.75;
   }
 
-  springVacation([
-    "10",
-    "20500",
-    "11",
-    "1.2",
-    "8",
-    "13",
-    "100",
-    "150",
-    "500",
-    "400",
-    "600",
-    "130",
-    "300",
-    "350",
-    "200",
-    "300"
+  let totalExpenses = totalFoodAndAccommodationExpenses;
+  let moneyLeft = budget - totalExpenses;
+
+  for (let i = 1; i <= days; i++) {
+    let distance = Number(input[5 + i]);
+    let expensesForFuel = distance * fuelPrice;
+    let expensesForFood = people * foodPrice;
+
+    totalExpenses += expensesForFuel + expensesForFood;
+
+    if (i % 3 === 0 || i % 5 === 0) {
+      totalExpenses += totalExpenses * 1.40;
+    }
+
+    if (i % 7 === 0) {
+      let amountReceived = totalExpenses / people;
+      totalExpenses -= amountReceived;
+      moneyLeft = budget - totalExpenses;
+    }
+
+    if (totalExpenses > budget) {
+      console.log(`Not enough money to continue the trip.You need ${ (totalExpenses - budget).toFixed(2) }$ more.`);
+      break;
+    }
+  }
+
+  moneyLeft = budget - totalExpenses;
+   console.log(`You have reached the destination.You have ${ moneyLeft.toFixed(2) }$ budget left.`);
+}
+
+vacation([
+  "10",
+  "20500",
+  "11",
+  "1.2",
+  "8",
+  "13",
+  "100",
+  "150",
+  "500",
+  "400",
+  "600",
+  "130",
+  "300",
+  "350",
+  "200",
+  "300"
 ]);
